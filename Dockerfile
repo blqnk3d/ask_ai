@@ -33,7 +33,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxtst6 \
     xdg-utils \
     libgbm-dev \
-    **libasound2** \         # <- wichtig für Puppeteer!
+    libasound2 \         # <- wichtig für Puppeteer!
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
