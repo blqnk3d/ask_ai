@@ -32,7 +32,7 @@ RUN apt-get update && apt-get install -y \
     libxss1 \
     libxtst6 \
     xdg-utils \
-    libgbm-dev \  # Füge diese Zeile hinzu
+    libgbm-dev 
     --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
