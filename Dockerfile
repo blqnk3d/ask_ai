@@ -1,19 +1,7 @@
-# Verwende ein Node.js-Image
-FROM node:16
+# Verwende schlankes Node.js-Image als Basis
+FROM node:16-slim
 
-# Setze das Arbeitsverzeichnis
-WORKDIR /usr/src/app
-
-# Kopiere package.json und package-lock.json
-COPY package*.json ./
-
-# Installiere die Abhängigkeiten
-RUN npm install
-
-# Kopiere den Rest des Codes
-COPY . .
-
-# Installiere Puppeteer und alle systemabhängigen Chromium-Bibliotheken
+# Installiere Chromium und erforderliche Bibliotheken
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     gnupg \
@@ -33,15 +21,30 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxtst6 \
     xdg-utils \
     libgbm-dev \
-    libasound2 \         # <- wichtig für Puppeteer!
+    libasound2 \
+    ca-certificates \
+    curl \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Optional: Um die Puppeteer-Binary klein zu halten
-ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+# Setze das Arbeitsverzeichnis
+WORKDIR /usr/src/app
 
-# Exponiere den Port (je nach App)
+# Kopiere package.json und package-lock.json
+COPY package*.json ./
+
+# Installiere Node.js-Abhängigkeiten (inkl. Puppeteer)
+RUN npm install
+
+# Kopiere restlichen Code
+COPY . .
+
+# Umgebungsvariable: Chromium benötigt ggf. diese Flags in Docker
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=false
+ENV PUPPETEER_EXECUTABLE_PATH=/usr/src/app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome
+
+# Exponiere den Port (anpassen, wenn nötig)
 EXPOSE 3000
 
-# Starte die Anwendung
+# Starte die Node.js-Anwendung
 CMD ["node", "server.js"]
