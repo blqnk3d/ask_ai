@@ -14,7 +14,7 @@ RUN npm install
 COPY . .
 
 # Installiere Puppeteer und seine Abhängigkeiten
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     gnupg \
     fonts-liberation \
@@ -32,8 +32,7 @@ RUN apt-get update && apt-get install -y \
     libxss1 \
     libxtst6 \
     xdg-utils \
-    libgbm-dev 
-    --no-install-recommends \
+    libgbm-dev \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
