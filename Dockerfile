@@ -13,7 +13,7 @@ RUN npm install
 # Kopiere den Rest des Codes
 COPY . .
 
-# Installiere Puppeteer und seine Abhängigkeiten
+# Installiere Puppeteer und alle systemabhängigen Chromium-Bibliotheken
 RUN apt-get update && apt-get install -y --no-install-recommends \
     wget \
     gnupg \
@@ -33,10 +33,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libxtst6 \
     xdg-utils \
     libgbm-dev \
+    **libasound2** \         # <- wichtig für Puppeteer!
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Exponiere den Port
+# Optional: Um die Puppeteer-Binary klein zu halten
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
+# Exponiere den Port (je nach App)
 EXPOSE 3000
 
 # Starte die Anwendung
