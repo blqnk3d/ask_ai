@@ -1,4 +1,3 @@
-
 # Verwende ein Node.js-Image
 FROM node:16
 
@@ -18,7 +17,6 @@ COPY . .
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
-    && apt-get install -y \
     fonts-liberation \
     libappindicator3-1 \
     libatk-bridge2.0-0 \
@@ -34,6 +32,7 @@ RUN apt-get update && apt-get install -y \
     libxss1 \
     libxtst6 \
     xdg-utils \
+    libgbm-dev \  # Füge diese Zeile hinzu
     --no-install-recommends \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
