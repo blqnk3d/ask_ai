@@ -34,12 +34,12 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 
 # Installiere Node.js-Abhängigkeiten (inkl. Puppeteer)
-RUN npm install
+RUN npm install --unsafe-perm
 
 # Kopiere restlichen Code
 COPY . .
 
-# Umgebungsvariable: Chromium benötigt ggf. diese Flags in Docker
+# Umgebungsvariablen für Puppeteer
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=false
 ENV PUPPETEER_EXECUTABLE_PATH=/usr/src/app/node_modules/puppeteer/.local-chromium/linux-*/chrome-linux/chrome
 
